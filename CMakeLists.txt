@@ -9,6 +9,9 @@ set(EXECUTABLE_OUTPUT_PATH  ${CMAKE_SOURCE_DIR}/bin)
 # The main executable
 add_executable(rt-engine
   ${SOURCE_DIR}/main.cpp
+  ${SOURCE_DIR}/config.h
+  ${SOURCE_DIR}/logger/logger.h
+  ${SOURCE_DIR}/logger/logger.cpp
 )
 
 set_property(TARGET rt-engine PROPERTY CXX_STANDARD 17)
