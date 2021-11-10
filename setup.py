@@ -3,8 +3,13 @@ import pathlib, os, shlex, subprocess
 ROOT = pathlib.Path(__file__).parent.resolve()
 
 GENERATOR_OUT = ROOT / "_project"
+BIN_OUT = ROOT / "bin"
+
 if not GENERATOR_OUT.exists():
 	GENERATOR_OUT.mkdir()
+
+if not BIN_OUT.exists():
+	BIN_OUT.mkdir()
 
 os.chdir(GENERATOR_OUT)
 
