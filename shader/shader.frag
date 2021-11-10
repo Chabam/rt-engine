@@ -9,7 +9,7 @@ in vec3 fNormal;
 out vec4 color;
 
 void main(void)
-{       
+{
     vec3 o =-normalize(fPosition.xyz);
     vec3 n = normalize(fNormal);
     vec3 r = reflect(o,n);
