@@ -1,52 +1,74 @@
 #include "logger.h"
 #include <assert.h>
 
-Logger::Logger(bool debug) : m_debug(debug) {}
-
-const char* Logger::levelToText(Level level) {
-  switch (level) {
-    case Level::DEBUG:
-      return "DEBUG";
-      break;
-    case Level::INFO:
-      return "INFO";
-      break;
-    case Level::WARN:
-      return "WARN ";
-      break;
-    case Level::ERROR:
-      return "ERROR";
-      break;
-    default:
-      // Should not happen
-      assert(false);
-      break;
-  }
+Logger::Logger(Level level, bool debug) : m_debug(debug), m_level(level)
+{
 }
 
-void Logger::log(const char* text, Level level) {
-  if (!m_debug && level == Level::DEBUG)
-    return;
+Logger::~Logger()
+{
+    flush();
+}
 
-  static const char* WHITE = "\033[0m";
-  const char* color = WHITE;
-  switch (level) {
+const char *Logger::levelToText(Level level)
+{
+    switch (level)
+    {
     case Level::DEBUG:
-      color = "\x1B[32m";  // GREEN
-      break;
+        return "DEBUG";
+        break;
     case Level::INFO:
-      color = "\x1B[34m";  // BLUE
-      break;
+        return "INFO";
+        break;
     case Level::WARN:
-      color = "\x1B[33m";  // YELLOW
-      break;
+        return "WARN ";
+        break;
     case Level::ERROR:
-      color = "\x1B[31m";  // RED
-      break;
+        return "ERROR";
+        break;
     default:
-      break;
-  }
+        // Should not happen
+        assert(false);
+        break;
+    }
+}
 
-  std::cout << color << "[ " << levelToText(level) << " ] " << WHITE << text
-            << std::endl;
+std::ostringstream &Logger::operator<<(const char *text)
+{
+    m_stream << text;
+    return m_stream;
+}
+
+std::ostringstream &Logger::operator<<(const std::ostringstream &stream)
+{
+    m_stream << stream.str();
+    return m_stream;
+}
+
+void Logger::flush()
+{
+    if (!m_debug && m_level == Level::DEBUG)
+        return;
+
+    static const char *WHITE = "\033[0m";
+    const char *color = WHITE;
+    switch (m_level)
+    {
+    case Level::DEBUG:
+        color = "\x1B[32m"; // GREEN
+        break;
+    case Level::INFO:
+        color = "\x1B[34m"; // BLUE
+        break;
+    case Level::WARN:
+        color = "\x1B[33m"; // YELLOW
+        break;
+    case Level::ERROR:
+        color = "\x1B[31m"; // RED
+        break;
+    default:
+        break;
+    }
+
+    std::cout << color << "[ " << levelToText(m_level) << " ] " << WHITE << m_stream.str() << std::endl;
 }

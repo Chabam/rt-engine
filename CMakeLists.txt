@@ -6,28 +6,43 @@ set(SOURCE_DIR              ${CMAKE_SOURCE_DIR}/src)
 set(LIB_DIR                 ${CMAKE_SOURCE_DIR}/lib)
 set(EXECUTABLE_OUTPUT_PATH  ${CMAKE_SOURCE_DIR}/bin)
 
-# The main executable
-add_executable(rt-engine
+set(SOURCES
   ${SOURCE_DIR}/main.cpp
-  ${SOURCE_DIR}/config.h
-  ${SOURCE_DIR}/logger/logger.h
   ${SOURCE_DIR}/logger/logger.cpp
+  ${SOURCE_DIR}/glContext/buffer.cpp
+  ${SOURCE_DIR}/glContext/shader.cpp
+  ${SOURCE_DIR}/glContext/window.cpp
 )
 
-set_property(TARGET rt-engine PROPERTY CXX_STANDARD 17)
-target_compile_options(rt-engine PRIVATE -Wall)
+set(HEADERS
+${SOURCE_DIR}/config.h
+${SOURCE_DIR}/logger/logger.h
+${SOURCE_DIR}/glContext/buffer.h
+${SOURCE_DIR}/glContext/shader.h
+${SOURCE_DIR}/glContext/window.h
+)
+
+# The main executable
+add_executable(${CMAKE_PROJECT_NAME}
+  ${HEADERS}
+  ${SOURCES}
+)
+
+set_property(TARGET ${CMAKE_PROJECT_NAME} PROPERTY CXX_STANDARD 17)
+target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -Wall)
 
 # glfw
 add_subdirectory(${LIB_DIR}/glfw EXCLUDE_FROM_ALL)
-target_link_libraries(rt-engine PRIVATE glfw)
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE glfw)
 
 # glew
 add_definitions(-DGLEW_STATIC)
 add_subdirectory(${LIB_DIR}/glew EXCLUDE_FROM_ALL)
-target_link_libraries(rt-engine PRIVATE libglew_static)
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE libglew_static)
 
 # glm
 add_subdirectory(${LIB_DIR}/glm EXCLUDE_FROM_ALL)
-target_link_libraries(rt-engine PRIVATE glm)
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE glm)
 
-set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT rt-engine)
+set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${CMAKE_PROJECT_NAME})
+target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${SOURCE_DIR})
