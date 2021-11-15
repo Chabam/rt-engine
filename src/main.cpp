@@ -1,38 +1,33 @@
-#include "glContext/buffer.h"
-#include "glContext/shader.h"
-#include "glContext/window.h"
+#include "engine/engine.h"
 #include "logger/logger.h"
 
-#include <stdexcept>
 #include <array>
+#include <stdexcept>
 #include <vector>
 
 int main(void)
 {
-    Window window(700, 400);
-    Shader shader("../src/shaders/shader.vert", "../src/shaders/shader.frag");
-
-    LOG_INFO("Starting program!");
+    // clang-format off
+    Engine engine(
+        Window(800, 800),
+        Shader("../src/shaders/shader.vert", "../src/shaders/shader.frag")
+    );
+    // clang-format on
     try
     {
-        window.init();
-        shader.init();
+        engine.init();
+        engine.addBuffer({
+            {{-0.5f, -0.5f}},
+            {{0.5f, -0.5f}},
+            {{0.0f, 0.5f}},
+        });
+        engine.start();
     }
     catch (std::runtime_error e)
     {
-        LOG_ERROR("Exception thrown during initialization: " << e.what());
+        LOG_ERROR("Engine failed: " << e.what());
         return 1;
     }
-
-    // clang-format off
-    window.display({
-        {
-            {{-0.5f, -0.5f}},
-            {{0.5f, -0.5f}},
-            {{0.0f,  0.5f}},
-        }
-    });
-    // clang-format on
 
     return 0;
 }

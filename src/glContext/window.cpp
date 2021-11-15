@@ -17,24 +17,25 @@ Window::~Window()
 void Window::setSize(int width, int height)
 {
     m_width = width;
-    m_height = width;
+    m_height = height;
     glViewport(0, 0, m_width, m_height);
 }
 
-void Window::close()
+void Window::setToClose()
 {
     LOG_INFO("Closing window");
     glfwSetWindowShouldClose(m_impl, GLFW_TRUE);
 }
 
-void Window::handleKey(int key)
+bool Window::shouldClose()
 {
-    switch (key)
-    {
-    case GLFW_KEY_Q:
-        close();
-        break;
-    }
+    return glfwWindowShouldClose(m_impl);
+}
+
+void Window::swapBuffers()
+{
+    glfwSwapBuffers(m_impl);
+}
 }
 
 void Window::keyCallback(GLFWwindow *glfwWindow, int key, int scancode, int action, int mods)
@@ -48,7 +49,7 @@ void Window::keyCallback(GLFWwindow *glfwWindow, int key, int scancode, int acti
 
     if (action == GLFW_PRESS || action == GLFW_REPEAT)
     {
-        window->handleKey(key);
+        window->m_windowKeyPressCallback(key);
     }
 }
 
@@ -61,7 +62,7 @@ void Window::resizeCallback(GLFWwindow *glfwWindow, int width, int height)
         return;
     }
 
-    window->setSize(width, height);
+    window->m_windowResizeCallback(width, height);
 }
 
 void Window::init()
@@ -85,18 +86,12 @@ void Window::init()
     LOG_INFO("Window succesfully initialized");
 }
 
-void Window::display(std::vector<Buffer> buffers)
+void Window::setResizeCallback(WindowResizeCallback cb)
 {
-    while (!glfwWindowShouldClose(m_impl))
-    {
-        glClear(GL_COLOR_BUFFER_BIT);
+    m_windowResizeCallback = cb;
+}
 
-        for (const Buffer &buffer : buffers)
-        {
-            buffer.render();
-        }
-
-        glfwSwapBuffers(m_impl);
-        glfwPollEvents();
-    }
+void Window::setKeyPressCallback(KeyPressCallback cb)
+{
+    m_windowKeyPressCallback = cb;
 }

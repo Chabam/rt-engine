@@ -1,4 +1,5 @@
 #include <GL/glew.h>
+#include <array>
 #include <initializer_list>
 #include <vector>
 #include <array>
@@ -6,7 +7,7 @@
 class Buffer
 {
   public:
-    typedef std::array<float, 3> ClipCoord;
+    typedef std::array<float, 2> ClipCoord;
     typedef std::vector<ClipCoord> Coords;
 
     Buffer(const Coords &coords);
@@ -15,7 +16,7 @@ class Buffer
     void render() const;
 
   private:
-    const Coords m_coords;
+    Coords m_coords;
     GLuint m_vertexBuffer;
     GLuint m_vertexArray;
     void init();

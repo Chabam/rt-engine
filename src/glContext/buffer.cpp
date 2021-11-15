@@ -18,9 +18,9 @@ void Buffer::init()
     glBindVertexArray(m_vertexArray);
     glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
 
-    glBufferData(GL_ARRAY_BUFFER, m_coords.size() * sizeof(GLfloat) * 3, m_coords.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, m_coords.size() * sizeof(GLfloat) * 2, m_coords.data(), GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void *)0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (void *)0);
     glEnableVertexAttribArray(0);
 }
 

@@ -1,6 +1,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <exception>
+#include <functional>
 #include <vector>
 
 class Buffer;
@@ -8,13 +9,19 @@ class Buffer;
 class Window
 {
   public:
+    typedef std::function<void(int)> KeyPressCallback;
+    typedef std::function<void(int, int)> WindowResizeCallback;
+
     Window(int width, int height, const char *title = "rt-engine");
     ~Window();
 
     void init();
-    void display(std::vector<Buffer> buffers);
-    void close();
+    void setToClose();
+    bool shouldClose();
     void setSize(int width, int height);
+    void setResizeCallback(WindowResizeCallback cb);
+    void setKeyPressCallback(KeyPressCallback cb);
+    void swapBuffers();
 
   private:
     int m_width;
@@ -22,6 +29,9 @@ class Window
     const char *m_title;
     GLFWwindow *m_impl;
     void handleKey(int key);
+
+    WindowResizeCallback m_windowResizeCallback = nullptr;
+    KeyPressCallback m_windowKeyPressCallback = nullptr;
 
     static void keyCallback(GLFWwindow *glfwWindow, int key, int scancode, int action, int mods);
     static void resizeCallback(GLFWwindow *glfwWindow, int with, int height);

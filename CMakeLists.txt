@@ -7,19 +7,21 @@ set(LIB_DIR                 ${CMAKE_SOURCE_DIR}/lib)
 set(EXECUTABLE_OUTPUT_PATH  ${CMAKE_SOURCE_DIR}/bin)
 
 set(SOURCES
-  ${SOURCE_DIR}/main.cpp
-  ${SOURCE_DIR}/logger/logger.cpp
-  ${SOURCE_DIR}/glContext/buffer.cpp
-  ${SOURCE_DIR}/glContext/shader.cpp
-  ${SOURCE_DIR}/glContext/window.cpp
+    ${SOURCE_DIR}/main.cpp
+    ${SOURCE_DIR}/logger/logger.cpp
+    ${SOURCE_DIR}/glContext/buffer.cpp
+    ${SOURCE_DIR}/glContext/shader.cpp
+    ${SOURCE_DIR}/glContext/window.cpp
+    ${SOURCE_DIR}/engine/engine.cpp
 )
 
 set(HEADERS
-${SOURCE_DIR}/config.h
-${SOURCE_DIR}/logger/logger.h
-${SOURCE_DIR}/glContext/buffer.h
-${SOURCE_DIR}/glContext/shader.h
-${SOURCE_DIR}/glContext/window.h
+    ${SOURCE_DIR}/config.h
+    ${SOURCE_DIR}/logger/logger.h
+    ${SOURCE_DIR}/glContext/buffer.h
+    ${SOURCE_DIR}/glContext/shader.h
+    ${SOURCE_DIR}/glContext/window.h
+    ${SOURCE_DIR}/engine/engine.h
 )
 
 # The main executable
