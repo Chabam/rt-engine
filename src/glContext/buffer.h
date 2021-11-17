@@ -1,23 +1,22 @@
+#pragma once
+#include "object/color.h"
+#include "object/vertice.h"
 #include <GL/glew.h>
 #include <array>
 #include <initializer_list>
 #include <vector>
-#include <array>
 
 class Buffer
 {
   public:
-    typedef std::array<float, 2> ClipCoord;
-    typedef std::vector<ClipCoord> Coords;
+    static const auto VERTICE_DATA_SIZE = 6;
+    static const auto VERTICE_POINTER_SIZE = VERTICE_DATA_SIZE * sizeof(GLfloat);
+    typedef std::array<GLfloat, VERTICE_DATA_SIZE> VerticeData;
 
-    Buffer(const Coords &coords);
-    Buffer(const std::initializer_list<ClipCoord> &coords);
-
-    void render() const;
+    Buffer(const std::vector<Vertice> &vertices);
+    ~Buffer();
 
   private:
-    Coords m_coords;
-    GLuint m_vertexBuffer;
-    GLuint m_vertexArray;
-    void init();
+    GLuint m_VBO;
+    GLuint m_VAO;
 };

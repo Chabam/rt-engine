@@ -2,7 +2,7 @@
 #include "logger/logger.h"
 #include <functional>
 
-Engine::Engine(Window &window, Shader &shader) : m_window(window), m_shader(shader)
+Engine::Engine(Window &window, Shader &shader) : m_window(window), m_shader(shader), m_triangleCount(0)
 {
 }
 
@@ -23,41 +23,35 @@ void Engine::init()
 
 void Engine::start()
 {
-    if (m_buffers.empty())
+    if (m_triangleCount == 0)
     {
-        LOG_WARN("No buffers to draw!");
+        LOG_WARN("Nothing to draw!");
         return;
     }
-
 
     while (!m_window.shouldClose())
     {
         render();
         glfwPollEvents();
     }
-
 }
 
 void Engine::render()
 {
     glClear(GL_COLOR_BUFFER_BIT);
 
-    for (const Buffer &buffer : m_buffers)
-    {
-        buffer.render();
-    }
+    static Color::Normalized BLACK = {0.0f, 0.0f, 0.0f, 0.0f};
+    glClearBufferfv(GL_COLOR, 0, BLACK.data());
+
+    // Might want to move that to the objects if we want to selectively render them!
+    glDrawArrays(GL_TRIANGLES, 0, m_triangleCount);
 
     m_window.swapBuffers();
 }
 
-void Engine::addBuffers(const std::vector<Buffer> &buffers)
+void Engine::addTriangles(const uint64_t &triangleCount)
 {
-    m_buffers.insert(m_buffers.end(), buffers.begin(), buffers.end());
-}
-
-void Engine::addBuffer(const Buffer &buffer)
-{
-    m_buffers.push_back(buffer);
+    m_triangleCount += triangleCount * 3;
 }
 
 void Engine::handleKeyPress(Engine* engine, int keyCode)
@@ -65,6 +59,7 @@ void Engine::handleKeyPress(Engine* engine, int keyCode)
     switch (keyCode)
     {
     case GLFW_KEY_Q:
+        LOG_INFO("Closing!");
         engine->m_window.setToClose();
         break;
     }

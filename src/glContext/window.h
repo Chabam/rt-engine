@@ -28,7 +28,6 @@ class Window
     int m_height;
     const char *m_title;
     GLFWwindow *m_impl;
-    void handleKey(int key);
 
     WindowResizeCallback m_windowResizeCallback = nullptr;
     KeyPressCallback m_windowKeyPressCallback = nullptr;

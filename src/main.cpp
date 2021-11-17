@@ -1,5 +1,7 @@
 #include "engine/engine.h"
 #include "logger/logger.h"
+#include "object/object.h"
+#include "object/vertice.h"
 
 #include <array>
 #include <stdexcept>
@@ -16,11 +18,18 @@ int main(void)
     try
     {
         engine.init();
-        engine.addBuffer({
-            {{-0.5f, -0.5f}},
-            {{0.5f, -0.5f}},
-            {{0.0f, 0.5f}},
+        const Color::RGB RED = {255, 0, 0};
+        const Color::RGB GREEN = {0, 255, 0};
+        const Color::RGB BLUE = {0, 255, 0};
+        
+        // clang-format off
+        Object triangle({
+            {{-0.5f, -0.5f, 0.f}, RED},
+            {{0.5f, -0.5f, 0.f}, GREEN},
+            {{0.0f, 0.5f, 0.f}, BLUE}
         });
+        engine.addTriangles(1);
+        // clang-format on
         engine.start();
     }
     catch (std::runtime_error e)

@@ -36,7 +36,6 @@ void Window::swapBuffers()
 {
     glfwSwapBuffers(m_impl);
 }
-}
 
 void Window::keyCallback(GLFWwindow *glfwWindow, int key, int scancode, int action, int mods)
 {

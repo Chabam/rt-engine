@@ -11,7 +11,7 @@ Shader::~Shader()
 {
 }
 
-const const std::string Shader::readFromFile(const char *relativePath)
+const std::string Shader::readFromFile(const char *relativePath)
 {
     std::filesystem::path path = std::filesystem::current_path().append(relativePath);
     std::ifstream file = std::ifstream(path);
