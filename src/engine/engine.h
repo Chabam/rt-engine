@@ -6,7 +6,7 @@
 class Engine
 {
   public:
-    Engine(Window &window, Shader &shader);
+    Engine(const Window& window, const Shader &shader);
 
     void init();
     void addTriangles(const uint64_t &triangleCount);

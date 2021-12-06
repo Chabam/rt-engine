@@ -11,6 +11,6 @@ struct RGB
 
 typedef std::array<float, 4> Normalized;
 
-const Normalized& normalize(RGB color);
+const Normalized normalize(RGB color);
 
 } // namespace Color

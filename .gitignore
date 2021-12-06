@@ -2,6 +2,7 @@ _project/
 bin/
 .vs/
 out/
+build/
 
 Makefile
 CMakeCache.txt

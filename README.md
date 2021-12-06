@@ -6,6 +6,14 @@
 * Image rendering
 * Multi-threaded
 
+## Required package for Ubuntu
+* libx11-dev
+* libxrandr-dev
+* libxinerama-dev
+* libxcursor-dev
+* libxi-dev
+* libglu-dev
+
 ## How to build
 ```bash
 $ python setup.py

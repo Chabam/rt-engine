@@ -21,7 +21,7 @@ int main(void)
         const Color::RGB RED = {255, 0, 0};
         const Color::RGB GREEN = {0, 255, 0};
         const Color::RGB BLUE = {0, 255, 0};
-        
+
         // clang-format off
         Object triangle({
             {{-0.5f, -0.5f, 0.f}, RED},

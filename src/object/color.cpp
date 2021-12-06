@@ -1,7 +1,7 @@
 #pragma once
 #include "object/color.h"
 
-const Color::Normalized& Color::normalize(RGB color)
+const Color::Normalized Color::normalize(RGB color)
 {
     return {
         color.r / 255.f,

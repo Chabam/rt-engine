@@ -2,7 +2,7 @@
 #include "logger/logger.h"
 #include <functional>
 
-Engine::Engine(Window &window, Shader &shader) : m_window(window), m_shader(shader), m_triangleCount(0)
+Engine::Engine(const Window &window, const Shader &shader) : m_window(window), m_shader(shader), m_triangleCount(0)
 {
 }
 
