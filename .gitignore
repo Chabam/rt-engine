@@ -1,6 +1,7 @@
 _project/
 bin/
 .vs/
+.vscode/
 out/
 build/
 

@@ -49,9 +49,14 @@ void Engine::render()
     m_window.swapBuffers();
 }
 
-void Engine::addTriangles(const uint64_t &triangleCount)
+void Engine::setMeshes(const std::vector<Mesh> &meshes)
 {
-    m_triangleCount += triangleCount * 3;
+    m_meshes = meshes;
+
+    for (const Mesh& mesh : m_meshes)
+    {
+        m_triangleCount += mesh.getTriangleCount() * 3;
+    }
 }
 
 void Engine::handleKeyPress(Engine* engine, int keyCode)
