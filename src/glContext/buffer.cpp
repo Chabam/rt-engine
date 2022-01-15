@@ -28,7 +28,7 @@ Buffer::Buffer(const std::vector<Vertice> &vertices)
     const auto VERTICES_COUNT = vertices.size();
     const auto TOTAL_DATA_SIZE = sizeof(GLfloat) * VERTICES_COUNT * VERTICE_DATA_SIZE;
     const auto START_COORD = (void *)0;
-    const auto START_COLOR = (void *)(2 * sizeof(GLfloat));
+    const auto START_COLOR = (void *)(COORD_DATA * sizeof(GLfloat));
 
     // Coord at the start of the buffer
     glVertexAttribPointer(0, VERTICES_COUNT, GL_FLOAT, GL_FALSE, VERTICE_POINTER_SIZE, START_COORD);
@@ -39,12 +39,6 @@ Buffer::Buffer(const std::vector<Vertice> &vertices)
     glEnableVertexAttribArray(1);
 
     glBufferData(GL_ARRAY_BUFFER, TOTAL_DATA_SIZE, verticesData.data(), GL_STATIC_DRAW);
-}
-
-Buffer &Buffer::operator=(const Buffer &other)
-{
-    m_VAO = other.m_VAO;
-    m_VBO = other.m_VBO;
 }
 
 Buffer::~Buffer()

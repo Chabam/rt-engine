@@ -9,14 +9,14 @@
 class Buffer
 {
   public:
-    static const auto VERTICE_DATA_SIZE = 2 + 4; // x, y, r, g, b, a
+    static const auto COORD_DATA = 2; // x, y
+    static const auto COLOR_DATA = 4; // r, g, b, a
+    static const auto VERTICE_DATA_SIZE = COORD_DATA + COLOR_DATA;
     static const auto VERTICE_POINTER_SIZE = VERTICE_DATA_SIZE * sizeof(GLfloat);
     typedef std::array<GLfloat, VERTICE_DATA_SIZE> VerticeData;
 
-    Buffer();
     Buffer(const std::vector<Vertice> &vertices);
-    virtual ~Buffer();
-    Buffer &operator=(const Buffer &other);
+    ~Buffer();
 
   private:
     GLuint m_VBO;
