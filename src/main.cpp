@@ -19,8 +19,12 @@ int main(void)
         engine.init();
 
         // clang-format off
-        Cube cube;
-        engine.setMeshes({cube});
+        std::vector<Mesh> objects = {Cube(), Cube(Material({0.f, 0.f, 1.f, 1.f}))};
+
+        objects[0].applyTransformation(glm::translate(glm::mat4(1.f), glm::vec3(-2.f, 0.f, 0.f)));
+        objects[1].applyTransformation(glm::translate(glm::mat4(1.f), glm::vec3(2.f, 0.f, 0.f)));
+
+        engine.setMeshes(objects);
         // clang-format on
         engine.start();
     }

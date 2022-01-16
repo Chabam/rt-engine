@@ -1,13 +1,5 @@
 #pragma once
 #include "object/color.h"
+#include <glm/glm.hpp>
 
-struct Vertice
-{
-    struct Coord
-    {
-        float x, y, z;
-    };
-
-    Coord m_coord;
-    Color::RGB m_color = {255, 255, 255, 255};
-};
+typedef glm::vec3 Vertice;

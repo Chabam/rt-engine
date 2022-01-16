@@ -15,6 +15,7 @@ set(SOURCES
 	${SOURCE_DIR}/glContext/window.cpp
 	${SOURCE_DIR}/object/color.cpp
 	${SOURCE_DIR}/object/mesh.cpp
+	${SOURCE_DIR}/object/material.cpp
 	${SOURCE_DIR}/object/cube.cpp
 	${SOURCE_DIR}/object/quad.cpp
 	${SOURCE_DIR}/object/triangle.cpp
@@ -29,6 +30,7 @@ set(HEADERS
 	${SOURCE_DIR}/glContext/window.h
 	${SOURCE_DIR}/object/color.h
 	${SOURCE_DIR}/object/cube.h
+	${SOURCE_DIR}/object/material.h
 	${SOURCE_DIR}/object/mesh.h
 	${SOURCE_DIR}/object/quad.h
 	${SOURCE_DIR}/object/triangle.h

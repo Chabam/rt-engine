@@ -6,16 +6,16 @@
 class Cube : public Mesh
 {
   public:
-    Cube(uint32_t size = 1);
+    Cube(const Material& material = Material());
 
-    const Vertice p1 = {1, -1, 1, {0, 0, 0, 255}};
-    const Vertice p2 = {1, 1, 1, {255, 0, 0, 255}};
-    const Vertice p4 = {1, -1, -1, {0, 255, 0, 255}};
-    const Vertice p7 = {-1, -1, -1, {0, 0, 255, 255}};
-    const Vertice p3 = {1, 1, -1, {255, 255, 0, 255}};
-    const Vertice p5 = {-1, 1, 1, {0, 255, 255, 255}};
-    const Vertice p6 = {-1, -1, 1, {255, 0, 255, 255}};
-    const Vertice p8 = {-1, 1, -1, {255, 255, 255, 255}};
+    const Vertice p1 = {1, -1, 1};
+    const Vertice p2 = {1, 1, 1};
+    const Vertice p4 = {1, -1, -1};
+    const Vertice p7 = {-1, -1, -1};
+    const Vertice p3 = {1, 1, -1};
+    const Vertice p5 = {-1, 1, 1};
+    const Vertice p6 = {-1, -1, 1};
+    const Vertice p8 = {-1, 1, -1};
 
     // clang-format off
 	std::array<Quad, 6> m_quads = {

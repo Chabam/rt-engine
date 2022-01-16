@@ -67,12 +67,10 @@ void Engine::render()
     for (RenderTarget &renderTarget : m_renderTargets)
     {
         m_shader.bind();
-        m_shader.setUniforms(renderTarget.m_mesh.getModel(), VIEW_MATRIX, PROJECTION_MATRIX);
-        renderTarget.m_mesh.applyTransformation(glm::rotate(rotation, glm::normalize(glm::vec3(1.f, 1.f, 0.f))));
+        m_shader.setUniforms(renderTarget.m_mesh.getMaterial(), renderTarget.m_mesh.getModel(), VIEW_MATRIX, PROJECTION_MATRIX);
         glDrawArrays(GL_TRIANGLES, 0, renderTarget.m_mesh.getTriangleCount() * 3);
         m_shader.unbind();
     }
-    rotation += (m_fps / 10) / 360.f;
 
     m_window.swapBuffers();
 }

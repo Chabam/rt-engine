@@ -1,3 +1,4 @@
+#include "object/material.h"
 #include <GL/glew.h>
 #include <fstream>
 #include <glm/glm.hpp>
@@ -13,7 +14,8 @@ class Shader
     void reload();
     void bind() const;
     void unbind() const;
-    void setUniforms(const glm::mat4 &model, const glm::mat4 &view, const glm::mat4 &projection);
+    void setUniforms(const Material &material, const glm::mat4 &model, const glm::mat4 &view,
+                     const glm::mat4 &projection);
 
   private:
     const char *m_vertPath;

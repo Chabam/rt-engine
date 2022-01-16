@@ -120,15 +120,18 @@ void Shader::unbind() const
     glUseProgram(0);
 }
 
-void Shader::setUniforms(const glm::mat4 &model, const glm::mat4 &view, const glm::mat4 &projection)
+void Shader::setUniforms(const Material& material, const glm::mat4 &model, const glm::mat4 &view,
+                         const glm::mat4 &projection)
 {
     int projectionMatrixLocation = glGetUniformLocation(m_programUid, "projection");
     int viewMatrixLocation = glGetUniformLocation(m_programUid, "view");
     int modelMatrixLocation = glGetUniformLocation(m_programUid, "model");
+    int colorLocation = glGetUniformLocation(m_programUid, "color");
 
     glUniformMatrix4fv(projectionMatrixLocation, 1, GL_FALSE, glm::value_ptr(model));
     glUniformMatrix4fv(viewMatrixLocation, 1, GL_FALSE, glm::value_ptr(view));
     glUniformMatrix4fv(modelMatrixLocation, 1, GL_FALSE, glm::value_ptr(projection));
+    glUniform4f(colorLocation, material.m_color.r, material.m_color.g, material.m_color.b, material.m_color.a);
 }
 
 void Shader::init()

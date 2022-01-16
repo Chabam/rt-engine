@@ -40,5 +40,4 @@ class Engine
                                               glm::vec3(0, -1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
     );
     glm::mat4 PROJECTION_MATRIX = glm::perspective(glm::radians(90.f), 16 / 9.f, 0.1f, 100.0f);
-    float rotation;
 };

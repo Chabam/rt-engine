@@ -1,21 +1,26 @@
 #include "object/mesh.h"
 #include <algorithm>
+#include "logger/logger.h"
+#include "glm/gtx/string_cast.hpp"
 
-Mesh::Mesh(const std::vector<Triangle> &triangles) : m_triangles(triangles), m_model(1.f)
+Mesh::Mesh(const std::vector<Triangle> &triangles, const Material &material)
+    : m_triangles(triangles), m_model(1.f), m_material(material)
 {
 }
 
-Mesh::Mesh(const Mesh &other) : m_triangles(other.m_triangles)
+Mesh::Mesh(const Mesh &other) : m_triangles(other.m_triangles), m_model(other.m_model), m_material(other.m_material)
 {
 }
 
-Mesh::Mesh() : m_triangles(), m_model(1.f)
+Mesh::Mesh() : m_triangles(), m_model(1.f), m_material()
 {
 }
 
 Mesh &Mesh::operator=(const Mesh &other)
 {
     m_triangles = other.m_triangles;
+    m_model = other.m_model;
+    m_material = other.m_material;
 
     return *this;
 }
@@ -42,10 +47,15 @@ const glm::mat4 &Mesh::getModel() const
 
 void Mesh::applyTransformation(const glm::mat4 &trans)
 {
-    m_model = trans;
+    m_model = m_model * trans;
 }
 
 const std::vector<Triangle> &Mesh::getTriangles() const
 {
     return m_triangles;
+}
+
+const Material &Mesh::getMaterial() const
+{
+    return m_material;
 }
