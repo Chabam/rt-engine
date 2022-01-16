@@ -1,3 +1,4 @@
+#include "config.h"
 #include "engine.h"
 #include "logger/logger.h"
 #include <functional>
@@ -19,6 +20,9 @@ void Engine::init()
     }
 
     m_shader.init();
+
+    glEnable(GL_DEBUG_OUTPUT);
+    glDebugMessageCallback(handleGlError, nullptr);
 }
 
 void Engine::start()
@@ -44,22 +48,24 @@ void Engine::render()
     glClearBufferfv(GL_COLOR, 0, BLACK.data());
 
     // Might want to move that to the objects if we want to selectively render them!
-    glDrawArrays(GL_TRIANGLES, 0, m_triangleCount);
+    glDrawArrays(GL_LINE_STRIP, 0, m_triangleCount * 3);
 
     m_window.swapBuffers();
 }
 
 void Engine::setMeshes(const std::vector<Mesh> &meshes)
 {
-    m_meshes = meshes;
+    m_triangleCount = 0;
+    m_renderTargets.clear();
 
-    for (const Mesh& mesh : m_meshes)
+    for (const Mesh &mesh : meshes)
     {
-        m_triangleCount += mesh.getTriangleCount() * 3;
+        m_renderTargets.emplace_back(mesh, mesh.getVertices());
+        m_triangleCount += mesh.getTriangleCount();
     }
 }
 
-void Engine::handleKeyPress(Engine* engine, int keyCode)
+void Engine::handleKeyPress(Engine *engine, int keyCode)
 {
     switch (keyCode)
     {
@@ -74,4 +80,10 @@ void Engine::handleResize(Engine *engine, int width, int height)
 {
     engine->m_window.setSize(width, height);
     engine->render();
+}
+
+void Engine::handleGlError(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length,
+                           const GLchar *message, const void *userParam)
+{
+    LOG_ERROR("OpenGL error: " << message);
 }

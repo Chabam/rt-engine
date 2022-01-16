@@ -11,8 +11,8 @@ class Mesh
     Mesh(const Mesh &other);
     Mesh &operator=(const Mesh &other);
     uint32_t getTriangleCount() const;
+    std::vector<Vertice> getVertices() const;
 
   private:
     std::vector<Triangle> m_triangles;
-    Buffer m_buffer;
 };

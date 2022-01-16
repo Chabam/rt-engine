@@ -21,4 +21,5 @@ class Buffer
   private:
     GLuint m_VBO;
     GLuint m_VAO;
+    std::vector<VerticeData> m_data;
 };
