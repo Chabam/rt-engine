@@ -16,8 +16,10 @@ class Mesh
     std::vector<Vertice> getVertices() const;
     const glm::mat4 &getModel() const;
     void applyTransformation(const glm::mat4 &trans);
+    const std::vector<Triangle> &getTriangles() const;
 
-  private:
+  protected:
+    Mesh();
     std::vector<Triangle> m_triangles;
     glm::mat4 m_model;
 };

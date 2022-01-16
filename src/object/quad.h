@@ -1,6 +1,8 @@
+#pragma once
 #include "object/mesh.h"
 #include "object/triangle.h"
 #include "object/vertice.h"
+#include <array>
 
 class Quad : public Mesh
 {
@@ -9,8 +11,5 @@ class Quad : public Mesh
     Quad(const Quad &other);
     Quad &operator=(const Quad &other);
 
-	Vertice m_p1;
-	Vertice m_p2;
-	Vertice m_p3;
-	Vertice m_p4;
+	std::array<Vertice, 4> m_p;
 };

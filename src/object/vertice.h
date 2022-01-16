@@ -9,5 +9,5 @@ struct Vertice
     };
 
     Coord m_coord;
-    Color::RGB m_color;
+    Color::RGB m_color = {255, 255, 255, 255};
 };

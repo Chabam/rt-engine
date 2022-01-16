@@ -1,6 +1,6 @@
 #include "engine/engine.h"
 #include "logger/logger.h"
-#include "object/quad.h"
+#include "object/cube.h"
 #include "object/vertice.h"
 
 #include <array>
@@ -17,19 +17,10 @@ int main(void)
     try
     {
         engine.init();
-        const Color::RGB RED = {255, 0, 0};
-        const Color::RGB GREEN = {0, 255, 0};
-        const Color::RGB BLUE = {0, 0, 255};
-        const Color::RGB YELLOW = {255, 255, 0};
 
         // clang-format off
-        Quad quad(
-            {{0.5f, -0.5f, 0.f}, RED},
-            {{0.5f, 0.5f, 0.f}, GREEN},
-            {{-0.5f, 0.5f, 0.f}, BLUE},
-            {{-0.5f, -0.5f, 0.f}, YELLOW}
-        );
-        engine.setMeshes({quad});
+        Cube cube;
+        engine.setMeshes({cube});
         // clang-format on
         engine.start();
     }

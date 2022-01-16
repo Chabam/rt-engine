@@ -39,6 +39,7 @@ void Engine::start()
         return;
     }
 
+    glEnable(GL_DEPTH_TEST);
     while (!m_window.shouldClose())
     {
         typedef std::chrono::duration<double, std::milli> miliseconds;
@@ -61,17 +62,17 @@ void Engine::render()
     static Color::Normalized BLACK = {0.0f, 0.0f, 0.0f, 0.0f};
     glClearBufferfv(GL_COLOR, 0, BLACK.data());
 
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     for (RenderTarget &renderTarget : m_renderTargets)
     {
         m_shader.bind();
         m_shader.setUniforms(renderTarget.m_mesh.getModel(), VIEW_MATRIX, PROJECTION_MATRIX);
-        renderTarget.m_mesh.applyTransformation(glm::rotate(rotation, glm::normalize(glm::vec3(1.f, 1.f, 1.f))));
+        renderTarget.m_mesh.applyTransformation(glm::rotate(rotation, glm::normalize(glm::vec3(1.f, 1.f, 0.f))));
         glDrawArrays(GL_TRIANGLES, 0, renderTarget.m_mesh.getTriangleCount() * 3);
         m_shader.unbind();
     }
-    rotation += (m_fps) / 360.f;
+    rotation += (m_fps / 10) / 360.f;
 
     m_window.swapBuffers();
 }

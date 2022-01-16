@@ -9,6 +9,10 @@ Mesh::Mesh(const Mesh &other) : m_triangles(other.m_triangles)
 {
 }
 
+Mesh::Mesh() : m_triangles(), m_model(1.f)
+{
+}
+
 Mesh &Mesh::operator=(const Mesh &other)
 {
     m_triangles = other.m_triangles;
@@ -21,7 +25,7 @@ std::vector<Vertice> Mesh::getVertices() const
     std::vector<Vertice> vertices;
     for (const Triangle &triangle : m_triangles)
     {
-        vertices.insert(vertices.begin(), {triangle.m_p1, triangle.m_p2, triangle.m_p3});
+        vertices.insert(vertices.begin(), {triangle.m_p[0], triangle.m_p[1], triangle.m_p[2]});
     }
     return vertices;
 }
@@ -39,4 +43,9 @@ const glm::mat4 &Mesh::getModel() const
 void Mesh::applyTransformation(const glm::mat4 &trans)
 {
     m_model = trans;
+}
+
+const std::vector<Triangle> &Mesh::getTriangles() const
+{
+    return m_triangles;
 }
