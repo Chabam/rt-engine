@@ -1,5 +1,6 @@
 #include "buffer.h"
 #include "logger/logger.h"
+#include <algorithm>
 
 Buffer::Buffer(const std::vector<Vertice> &vertices)
 {
@@ -17,6 +18,7 @@ Buffer::Buffer(const std::vector<Vertice> &vertices)
         m_data.push_back({{
             vertice.m_coord.x,
             vertice.m_coord.y,
+            vertice.m_coord.z,
             color[0], // r
             color[1], // g
             color[2], // b
@@ -39,6 +41,15 @@ Buffer::Buffer(const std::vector<Vertice> &vertices)
     glEnableVertexAttribArray(1);
 
     glBufferData(GL_ARRAY_BUFFER, TOTAL_DATA_SIZE, m_data.data(), GL_STATIC_DRAW);
+}
+
+Buffer::Buffer(Buffer &&other)
+{
+    m_VAO = other.m_VAO;
+    m_VBO = other.m_VBO;
+
+    other.m_VAO = 0;
+    other.m_VBO = 0;
 }
 
 Buffer::~Buffer()

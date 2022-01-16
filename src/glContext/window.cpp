@@ -37,6 +37,11 @@ void Window::swapBuffers()
     glfwSwapBuffers(m_impl);
 }
 
+float Window::getAspectRatio() const
+{
+    return m_width / m_height;
+}
+
 void Window::keyCallback(GLFWwindow *glfwWindow, int key, int scancode, int action, int mods)
 {
     Window *window = static_cast<Window *>(glfwGetWindowUserPointer(glfwWindow));
@@ -75,6 +80,8 @@ void Window::init()
         glfwTerminate();
         throw std::runtime_error("Could not create a GLWF window!");
     }
+
+    glfwSetWindowAspectRatio(m_impl, 16, 9);
 
     // Events
     glfwSetWindowUserPointer(m_impl, this);

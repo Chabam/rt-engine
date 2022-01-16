@@ -20,6 +20,7 @@ class Window
     void setResizeCallback(WindowResizeCallback cb);
     void setKeyPressCallback(KeyPressCallback cb);
     void swapBuffers();
+    float getAspectRatio() const;
 
   private:
     int m_width;

@@ -11,7 +11,6 @@ int main(void)
 {
     // clang-format off
     Engine engine(
-        Window(800, 800),
         Shader("../src/shaders/shader.vert", "../src/shaders/shader.frag")
     );
     // clang-format on
@@ -36,7 +35,7 @@ int main(void)
     }
     catch (const std::runtime_error& e)
     {
-        LOG_ERROR("Engine failed: " << e.what());
+        LOG_ERROR(e.what());
         return 1;
     }
 

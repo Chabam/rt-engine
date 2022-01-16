@@ -1,8 +1,7 @@
 #include "object/mesh.h"
 #include <algorithm>
 
-Mesh::Mesh(const std::vector<Triangle> &triangles)
-    : m_triangles(triangles)
+Mesh::Mesh(const std::vector<Triangle> &triangles) : m_triangles(triangles), m_model(1.f)
 {
 }
 
@@ -30,4 +29,14 @@ std::vector<Vertice> Mesh::getVertices() const
 uint32_t Mesh::getTriangleCount() const
 {
     return m_triangles.size();
+}
+
+const glm::mat4 &Mesh::getModel() const
+{
+    return m_model;
+}
+
+void Mesh::applyTransformation(const glm::mat4 &trans)
+{
+    m_model = trans;
 }

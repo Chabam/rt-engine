@@ -1,5 +1,6 @@
 #include <GL/glew.h>
 #include <fstream>
+#include <glm/glm.hpp>
 #include <sstream>
 #include <string>
 
@@ -10,6 +11,9 @@ class Shader
     ~Shader();
     void init();
     void reload();
+    void bind() const;
+    void unbind() const;
+    void setUniforms(const glm::mat4 &model, const glm::mat4 &view, const glm::mat4 &projection);
 
   private:
     const char *m_vertPath;

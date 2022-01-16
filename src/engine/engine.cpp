@@ -1,9 +1,15 @@
-#include "config.h"
 #include "engine.h"
+#include "config.h"
 #include "logger/logger.h"
+#include <chrono>
 #include <functional>
+#include <thread>
 
-Engine::Engine(const Window &window, const Shader &shader) : m_window(window), m_shader(shader), m_triangleCount(0)
+Engine::Engine(const Shader &shader, const Window &window) : m_window(window), m_shader(shader), m_fps(60)
+{
+}
+
+Engine::RenderTarget::RenderTarget(const Mesh &mesh, Buffer &&buffer) : m_mesh(mesh), m_buffer(std::move(buffer))
 {
 }
 
@@ -27,7 +33,7 @@ void Engine::init()
 
 void Engine::start()
 {
-    if (m_triangleCount == 0)
+    if (m_renderTargets.empty())
     {
         LOG_WARN("Nothing to draw!");
         return;
@@ -35,33 +41,46 @@ void Engine::start()
 
     while (!m_window.shouldClose())
     {
+        typedef std::chrono::duration<double, std::milli> miliseconds;
+        using namespace std::chrono_literals;
+        auto beforeRender = std::chrono::system_clock::now();
+
         render();
         glfwPollEvents();
+
+        auto afterRender = std::chrono::system_clock::now();
+        miliseconds elapsed = afterRender - beforeRender;
+        const miliseconds maxTimePerFrame(1000ms / m_fps);
+
+        std::this_thread::sleep_for(maxTimePerFrame - elapsed);
     }
 }
 
 void Engine::render()
 {
-    glClear(GL_COLOR_BUFFER_BIT);
-
     static Color::Normalized BLACK = {0.0f, 0.0f, 0.0f, 0.0f};
     glClearBufferfv(GL_COLOR, 0, BLACK.data());
 
-    // Might want to move that to the objects if we want to selectively render them!
-    glDrawArrays(GL_LINE_STRIP, 0, m_triangleCount * 3);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    for (RenderTarget &renderTarget : m_renderTargets)
+    {
+        m_shader.bind();
+        m_shader.setUniforms(renderTarget.m_mesh.getModel(), VIEW_MATRIX, PROJECTION_MATRIX);
+        renderTarget.m_mesh.applyTransformation(glm::rotate(rotation, glm::normalize(glm::vec3(1.f, 1.f, 1.f))));
+        glDrawArrays(GL_TRIANGLES, 0, renderTarget.m_mesh.getTriangleCount() * 3);
+        m_shader.unbind();
+    }
+    rotation += (m_fps) / 360.f;
 
     m_window.swapBuffers();
 }
 
 void Engine::setMeshes(const std::vector<Mesh> &meshes)
 {
-    m_triangleCount = 0;
-    m_renderTargets.clear();
-
     for (const Mesh &mesh : meshes)
     {
         m_renderTargets.emplace_back(mesh, mesh.getVertices());
-        m_triangleCount += mesh.getTriangleCount();
     }
 }
 
@@ -73,17 +92,37 @@ void Engine::handleKeyPress(Engine *engine, int keyCode)
         LOG_INFO("Closing!");
         engine->m_window.setToClose();
         break;
+    case GLFW_KEY_R:
+        LOG_INFO("Reloading shaders");
+        engine->m_shader.reload();
+        break;
     }
 }
 
 void Engine::handleResize(Engine *engine, int width, int height)
 {
     engine->m_window.setSize(width, height);
+    engine->PROJECTION_MATRIX = glm::perspective(glm::radians(90.f), static_cast<float>(width) / height, 0.1f, 100.0f);
     engine->render();
 }
 
 void Engine::handleGlError(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length,
                            const GLchar *message, const void *userParam)
 {
-    LOG_ERROR("OpenGL error: " << message);
+    switch (severity)
+    {
+    case GL_DEBUG_SEVERITY_HIGH:
+        LOG_ERROR("OpenGL: " << message);
+        break;
+    case GL_DEBUG_SEVERITY_MEDIUM:
+        LOG_WARN("OpenGL: " << message);
+        break;
+    default:
+    case GL_DEBUG_SEVERITY_LOW:
+    case GL_DEBUG_SEVERITY_NOTIFICATION:
+        LOG_DEBUG("OpenGL: " << message);
+        return;
+    }
+
+    throw std::runtime_error("OpenGL fatal error!");
 }

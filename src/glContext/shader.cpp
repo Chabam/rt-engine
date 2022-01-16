@@ -2,6 +2,7 @@
 #include "glContext/window.h"
 #include "logger/logger.h"
 #include <filesystem>
+#include <glm/gtc/type_ptr.hpp>
 
 Shader::Shader(const char *vertPath, const char *fragPath) : m_vertPath(vertPath), m_fragPath(fragPath)
 {
@@ -51,6 +52,8 @@ void Shader::compileShaderSource(GLuint &shaderUid, GLenum type, const GLchar *s
         glDeleteShader(shaderUid);
 
         std::ostringstream out;
+        out << (type == GL_FRAGMENT_SHADER ? "Fragment" : "Vertex");
+        out << " shader compilation failed :" << std::endl;
         for (auto &character : infoLog)
         {
             out << character;
@@ -63,33 +66,18 @@ void Shader::compileShaderSource(GLuint &shaderUid, GLenum type, const GLchar *s
 void Shader::load()
 {
     // Compiling shaders
-    try
-    {
-        compileShaderSource(m_vertUid, GL_VERTEX_SHADER, readFromFile(m_vertPath).c_str());
-    }
-    catch (std::runtime_error e)
-    {
-        LOG_ERROR("Vertex shader failed compiling:" << std::endl << e.what());
-    }
+
+    compileShaderSource(m_vertUid, GL_VERTEX_SHADER, readFromFile(m_vertPath).c_str());
     LOG_INFO("Vertex shader compiled");
 
-    try
-    {
-        compileShaderSource(m_fragUid, GL_FRAGMENT_SHADER, readFromFile(m_fragPath).c_str());
-    }
-    catch (std::runtime_error e)
-    {
-        LOG_ERROR("Fragment shader failed compiling:" << std::endl << e.what());
-    }
+    compileShaderSource(m_fragUid, GL_FRAGMENT_SHADER, readFromFile(m_fragPath).c_str());
     LOG_INFO("Fragment shader compiled");
 
     m_programUid = glCreateProgram();
 
-    // Attaching to program
     glAttachShader(m_programUid, m_vertUid);
     glAttachShader(m_programUid, m_fragUid);
 
-    // Linking
     glLinkProgram(m_programUid);
 
     GLint isLinked = 0;
@@ -118,11 +106,29 @@ void Shader::load()
     }
     LOG_INFO("Program linked");
 
-    glUseProgram(m_programUid);
-    LOG_INFO("Starting engine");
-
     glDetachShader(m_programUid, m_vertUid);
     glDetachShader(m_programUid, m_fragUid);
+}
+
+void Shader::bind() const
+{
+    glUseProgram(m_programUid);
+}
+
+void Shader::unbind() const
+{
+    glUseProgram(0);
+}
+
+void Shader::setUniforms(const glm::mat4 &model, const glm::mat4 &view, const glm::mat4 &projection)
+{
+    int projectionMatrixLocation = glGetUniformLocation(m_programUid, "projection");
+    int viewMatrixLocation = glGetUniformLocation(m_programUid, "view");
+    int modelMatrixLocation = glGetUniformLocation(m_programUid, "model");
+
+    glUniformMatrix4fv(projectionMatrixLocation, 1, GL_FALSE, glm::value_ptr(model));
+    glUniformMatrix4fv(viewMatrixLocation, 1, GL_FALSE, glm::value_ptr(view));
+    glUniformMatrix4fv(modelMatrixLocation, 1, GL_FALSE, glm::value_ptr(projection));
 }
 
 void Shader::init()
@@ -142,5 +148,6 @@ void Shader::reload()
     catch (std::runtime_error e)
     {
         LOG_ERROR("Failed reloading the shaders: " << e.what());
+        LOG_INFO("Keeping previous version!");
     }
 }
