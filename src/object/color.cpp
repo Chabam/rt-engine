@@ -1,4 +1,3 @@
-#pragma once
 #include "object/color.h"
 
 const Color::Normalized Color::normalize(RGB color)
